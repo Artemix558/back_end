@@ -14,8 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('login', [\App\Http\Controllers\Auth\ApiAuthController::class, 'login']);
+Route::post('register', [\App\Http\Controllers\Auth\ApiAuthController::class, 'register']);
+Route::post('/send-mail', [\App\Http\Controllers\Auth\ApiAuthController::class, 'sendmail']);
+Route::post('/send-code', [\App\Http\Controllers\Auth\ApiAuthController::class, 'sendCode']);
+Route::post('/valitated', [\App\Http\Controllers\Auth\ApiAuthController::class, 'valitated']);
+Route::put('/resetpassword/{id}', [\App\Http\Controllers\Auth\ApiAuthController::class, 'resetpassword']);
 
-Route::get('access_token',[\App\Http\Controllers\API\AccessTokenController::class,'generate_token']);
+
+// demenagements
+Route::get('/MyDem', [\App\Http\Controllers\DemenagementController::class, 'index']);
+Route::post('/MyDem', [\App\Http\Controllers\DemenagementController::class, 'store']);
+Route::put('/MyDem', [\App\Http\Controllers\DemenagementController::class, 'update']);
+Route::delete('/MyDem', [\App\Http\Controllers\DemenagementController::class, 'delete']);
+
+
+// objects non fragile
+Route::get('/objet-non-fragile', [\App\Http\Controllers\ObjetController::class, 'index']);
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', [\App\Http\Controllers\Auth\ApiAuthController::class, 'logout']);
+    Route::get('/user', [\App\Http\Controllers\Auth\ApiAuthController::class, 'user']);
+});
